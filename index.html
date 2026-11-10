@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCSICT Events | Isabela State University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
+</head>
+<body>
+<!-- Live background, dark mode: three soft colored glows that drift slowly -->
+<div class="bg" aria-hidden="true"><span></span><span></span><span></span></div>
+<!-- Live background, light mode: an orange, white and black gradient that slowly flows -->
+<div class="bg-light" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<header class="bar" id="bar">
+  <a class="brand" href="#home" data-page="home">
+    <img src="isu-logo.png" alt="ISU seal"><img src="ccsict-logo.png" alt="CCSICT logo">
+    <span><b>CCSICT Events</b><small>Isabela State University</small></span>
+  </a>
+  <nav id="nav" aria-label="Main">
+    <a href="#home" class="nav-btn" data-page="home">Events</a>
+    <a href="#register" class="nav-btn" data-page="register">Register</a>
+    <a href="#participants" class="nav-btn" data-page="participants">Participants</a>
+  </nav>
+  <button class="icon-btn" id="theme" aria-label="Toggle dark mode">◐</button>
+  <button class="icon-btn menu" id="menu" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
+</header>
+
+<main>
+<section id="home" class="page">
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Events for every CCSICT student.</h1>
+      <p>Seminars, workshops, and competitions from the College of Computing Studies, Information and Communication Technology. Pick an event and sign up.</p>
+      <div class="hero-actions"><a class="btn gold" href="#events-title" id="browse">Browse events</a><a class="btn ghost" href="#register" data-page="register">Register now</a></div>
+      <ul class="stats"><li><b id="st-events">0</b> events</li><li><b id="st-people">0</b> registered</li><li><b>Echague</b> ISU Main Campus</li></ul>
+    </div>
+  </div>
+
+  <h2 id="events-title">Upcoming events</h2>
+  <div class="tools">
+    <div class="chips" id="chips"></div>
+    <input type="search" id="search" placeholder="Search events" aria-label="Search events">
+  </div>
+  <div id="events-list" class="grid"></div>
+  <p id="no-events" class="empty" hidden>No events match your search. Try another keyword or category.</p>
+</section>
+
+<section id="register" class="page" hidden>
+  <div class="panel narrow">
+    <h2>Event registration</h2>
+    <p class="sub">Registration is free. Fill in your details below.</p>
+    <div id="form-alert" class="alert" hidden></div>
+    <form id="reg-form" novalidate>
+      <label>Event<select id="reg-event"></select></label>
+      <label>Full name<input id="reg-name" placeholder="Juan Dela Cruz" autocomplete="name"></label>
+      <label>Email address<input id="reg-email" type="email" placeholder="you@isu.edu.ph" autocomplete="email"></label>
+      <fieldset><legend>Year level</legend>
+        <div class="radios">
+          <label><input type="radio" name="year" value="1st Year">1st Year</label>
+          <label><input type="radio" name="year" value="2nd Year">2nd Year</label>
+          <label><input type="radio" name="year" value="3rd Year">3rd Year</label>
+          <label><input type="radio" name="year" value="4th Year">4th Year</label>
+        </div>
+      </fieldset>
+      <label class="check"><input type="checkbox" id="reg-terms"><span>I agree to follow the <a href="#" id="rules-link">event rules and campus policies</a>.</span></label>
+      <button class="btn green full" type="submit">Complete registration</button>
+    </form>
+  </div>
+</section>
+
+<section id="participants" class="page" hidden>
+  <div class="panel">
+    <div class="row-head"><h2>Participants</h2><input type="search" id="p-search" placeholder="Search name, email or event" aria-label="Search participants"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Event</th><th>Year</th><th>Actions</th></tr></thead>
+        <tbody id="p-list"></tbody>
+      </table>
+    </div>
+    <p id="p-count" class="count"></p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <b>CCSICT Events</b>
+      <p>College of Computing Studies, Information and Communication Technology, Isabela State University.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#home" data-page="home">Events</a></li>
+        <li><a href="#register" data-page="register">Register</a></li>
+        <li><a href="#participants" data-page="participants">Participants</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Campus</h4>
+      <ul>
+        <li>ISU Main Campus</li>
+        <li>Echague, Isabela</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom"><span>BSIT 2-2 · Group 3 · Platform Technologies</span><span>&copy; 2026 CCSICT, Isabela State University</span></div>
+</footer>
+
+<dialog id="d-detail" class="wide"><div class="dlg">
+  <button class="x" data-close aria-label="Close">×</button>
+  <img class="detail-image" id="dt-img" src="campus.png" alt="">
+  <p class="tag" id="dt-cat"></p>
+  <h3 id="dt-title"></h3>
+  <p id="dt-desc"></p>
+  <dl class="info"><div><dt>Date</dt><dd id="dt-date"></dd></div><div><dt>Time</dt><dd id="dt-time"></dd></div><div><dt>Venue</dt><dd id="dt-venue"></dd></div><div><dt>Registered</dt><dd id="dt-count"></dd></div></dl>
+  <h4>What to expect</h4><ul class="expect" id="dt-list"></ul>
+  <div class="actions"><button class="btn ghost-d" data-close>Close</button><button class="btn green" id="dt-reg">Register for this event</button></div>
+</div></dialog>
+
+<dialog id="d-rules" class="wide"><div class="dlg">
+  <button class="x" data-close aria-label="Close">×</button>
+  <h3>Event rules and campus policies</h3>
+  <h4>Event rules</h4>
+  <ul class="expect">
+    <li>Register with your real name and a working email address.</li>
+    <li>Arrive on time and bring your school ID for check-in.</li>
+    <li>Follow instructions from organizers, faculty, and campus security.</li>
+    <li>Treat everyone with respect. Harassment and bullying are not tolerated.</li>
+    <li>Photos and videos may be taken for university documentation.</li>
+  </ul>
+  <h4>Campus policies</h4>
+  <ul class="expect">
+    <li>Smoking, vaping, alcohol, and illegal substances are prohibited on campus.</li>
+    <li>Take care of ISU property and keep venues clean.</li>
+    <li>Wear appropriate attire as required by the university dress code.</li>
+    <li>Violations may lead to removal from the event and referral to the college.</li>
+  </ul>
+  <div class="actions"><button class="btn ghost-d" data-close>Close</button><button class="btn green" id="rules-agree">I agree</button></div>
+</div></dialog>
+
+<dialog id="d-edit"><form class="dlg" id="edit-form" novalidate>
+  <h3>Edit participant</h3>
+  <div id="edit-alert" class="alert" hidden></div>
+  <label>Full name<input id="e-name"></label>
+  <label>Email address<input id="e-email" type="email"></label>
+  <label>Event<select id="e-event"></select></label>
+  <label>Year level<select id="e-year"><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></label>
+  <div class="actions"><button type="button" class="btn ghost-d" data-close>Cancel</button><button class="btn green" type="submit">Save changes</button></div>
+</form></dialog>
+
+<dialog id="d-del"><div class="dlg">
+  <h3>Delete this participant?</h3>
+  <p>This will permanently remove the registration of:</p>
+  <p class="who"><b id="del-name"></b><span id="del-info"></span></p>
+  <div class="actions"><button class="btn ghost-d" data-close>Cancel</button><button class="btn red" id="del-ok">Confirm delete</button></div>
+</div></dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
