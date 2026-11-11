@@ -1,11 +1,3 @@
-// ==========================================================
-// CCSICT EVENT REGISTRATION SYSTEM
-//  1. Event data      4. Pages          7. Participants
-//  2. Small helpers   5. Event cards    8. Dark / light theme
-//  3. Google Sheet    6. Registration   9. Start the app
-// ==========================================================
-
-// The link to our Google Apps Script (the "middleman" to the Google Sheet)
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwREFtDXhlydLXQRgvBf8iWl-4kN8pQCcY9gGFuL8b7aq-zutd0V2gRoTTs9wzQ_VxU/exec";
 
 // ---------- 1. EVENT DATA ----------
@@ -17,9 +9,9 @@ const events = [
     category: "Social",
     date: "2026-11-20",
     time: "5:00 PM",
-    venue: "ISU Main Campus Gymnasium",
+    venue: "ISU Main Campus Amphitheatre",
     description: "An evening of games, music, and meeting classmates and seniors across all CCSICT programs.",
-    image: "https://cpu.edu.ph/wp-content/uploads/2025/08/CPU-CCS-kicks-off-the-school-year-with-Soiree-1.jpg",
+    image: "acquaintance.png",
     expect: ["Icebreaker games and team challenges", "Live music and performances", "Meet students and faculty from every year level"]
   },
   {
@@ -27,9 +19,9 @@ const events = [
     category: "Career",
     date: "2026-12-02",
     time: "1:00 PM",
-    venue: "CCSICT Building, Echague",
+    venue: "ISU Main Graduate School",
     description: "Guest talks with industry recruiters and alumni on getting your first job in tech.",
-    image: "https://itdc.up.edu.ph/news/evsu-tech-talk/evsu2.JPG",
+    image: "seminar.png",
     expect: ["Talks from industry recruiters and alumni", "Resume and interview tips", "Q&A and networking after the program"]
   },
   {
@@ -37,9 +29,9 @@ const events = [
     category: "Workshop",
     date: "2026-12-15",
     time: "9:00 AM",
-    venue: "CCSICT Computer Laboratory",
-    description: "Hands-on introduction to HTML, CSS, and JavaScript. Bring a laptop if you have one.",
-    image: "https://consynextech.com/Software-Services/images/about/03.png",
+    venue: "CCSICT Centrum Lab",
+    description: "Hands-on introduction to Web Development Basics. Bring a laptop if you have one.",
+    image: "workshop.png",
     expect: ["Build a simple web page from scratch", "Learn HTML, CSS, and JavaScript basics", "Guided practice with mentors"]
   },
   {
@@ -47,9 +39,9 @@ const events = [
     category: "Competition",
     date: "2026-12-18",
     time: "8:00 AM",
-    venue: "CCSICT Building, Echague",
+    venue: "CCSICT Building",
     description: "A 24-hour team challenge to build a working prototype that solves a campus problem.",
-    image: "https://api.hub.jhu.edu/factory/sites/default/files/styles/hub_xlarge/public/2023-09/hophacks-table092223.JPG",
+    image: "hackathon.png",
     expect: ["Form a team and pick a campus problem", "24 hours to design and build a prototype", "Demo day with judges and prizes"]
   }
 ];
