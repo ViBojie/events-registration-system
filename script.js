@@ -1,3 +1,11 @@
+// ==========================================================
+// CCSICT EVENT REGISTRATION SYSTEM
+//  1. Event data      4. Pages          7. Participants
+//  2. Small helpers   5. Event cards    8. Dark / light theme
+//  3. Google Sheet    6. Registration   9. Start the app
+// ==========================================================
+
+// The link to our Google Apps Script (the "middleman" to the Google Sheet)
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwREFtDXhlydLXQRgvBf8iWl-4kN8pQCcY9gGFuL8b7aq-zutd0V2gRoTTs9wzQ_VxU/exec";
 
 // ---------- 1. EVENT DATA ----------
@@ -46,6 +54,9 @@ const events = [
   }
 ];
 
+// The courses in the dropdown list. To add a course, add its name here.
+const courses = ["BSIT", "BSIT - WMAD", "BSIT - NETSEC", "BSCS", "BSIS", "BSBSA", "BLIS"];
+
 // The list of registered people. It is loaded from the Google Sheet.
 let participants = [];
 
@@ -83,6 +94,12 @@ function showError(boxId, message) {
 function checkNameAndEmail(name, email) {
   if (name.length < 2) return "Enter a full name.";
   if (!email.includes("@") || !email.includes(".")) return "Enter a valid email address, like you@isu.edu.ph.";
+  return "";
+}
+
+// Checks the student ID. It must look like 25-1568 (2 numbers, a dash, 4 numbers).
+function checkStudentId(studentId) {
+  if (!/^\d{2}-\d{4}$/.test(studentId)) return "Enter your student ID like 25-1568.";
   return "";
 }
 
@@ -248,6 +265,15 @@ function fillEventSelect(select, withPlaceholder) {
   }
 }
 
+// Puts the course names into a dropdown list
+function fillCourseSelect(select) {
+  select.innerHTML = "";
+  select.appendChild(new Option("Choose a course", ""));
+  for (const course of courses) {
+    select.appendChild(new Option(course, course));
+  }
+}
+
 // The two numbers on the home page
 function updateStats() {
   getById("st-events").textContent = events.length;
@@ -261,12 +287,17 @@ async function handleRegistration(submit) {
   const eventName = getById("reg-event").value;
   const name = getById("reg-name").value.trim();
   const email = getById("reg-email").value.trim().toLowerCase();
+  const studentId = getById("reg-studentid").value.trim();
+  const course = getById("reg-course").value;
   const year = document.querySelector("input[name=year]:checked");
 
   // Check one thing at a time. If something is wrong, show it and stop.
   if (eventName === "") return showError("form-alert", "Choose an event to continue.");
   const problem = checkNameAndEmail(name, email);
   if (problem !== "") return showError("form-alert", problem);
+  const idProblem = checkStudentId(studentId);
+  if (idProblem !== "") return showError("form-alert", idProblem);
+  if (course === "") return showError("form-alert", "Choose your course.");
   if (!year) return showError("form-alert", "Select your year level.");
   if (!getById("reg-terms").checked) return showError("form-alert", "Agree to the event rules to register.");
 
@@ -274,7 +305,7 @@ async function handleRegistration(submit) {
   const button = submit.target.querySelector("button");
   button.disabled = true;
   button.textContent = "Saving...";
-  const reply = await callSheet("add", { name: name, email: email, event: eventName, year: year.value });
+  const reply = await callSheet("add", { name: name, email: email, studentId: studentId, course: course, event: eventName, year: year.value });
   button.disabled = false;
   button.textContent = "Complete registration";
 
@@ -303,13 +334,15 @@ function renderParticipants() {
   let shown = 0;
 
   for (const person of participants) {
-    const text = (person.name + " " + person.email + " " + person.event).toLowerCase();
+    const text = ((person.studentId || "") + " " + person.name + " " + person.email + " " + (person.course || "") + " " + person.event).toLowerCase();
     if (!text.includes(search)) continue;
     shown++;
 
     const row = table.insertRow();
+    row.insertCell().textContent = person.studentId || "—";   // "—" for older rows with no student ID
     row.insertCell().textContent = person.name;
     row.insertCell().textContent = person.email;
+    row.insertCell().textContent = person.course || "—";   // "—" for older rows with no course
     row.insertCell().textContent = person.event;
     row.insertCell().textContent = person.year;
 
@@ -330,7 +363,7 @@ function renderParticipants() {
 
   if (shown === 0) {
     const cell = table.insertRow().insertCell();
-    cell.colSpan = 5;
+    cell.colSpan = 6;
     cell.className = "empty";
     cell.textContent = "No participants found.";
   }
@@ -345,8 +378,10 @@ function openEdit(id) {
   editingId = id;
 
   getById("edit-alert").hidden = true;
-  getById("e-name").value = person.name;      // fill the form with the current details
+  getById("e-studentid").value = person.studentId || "";   // fill the form with the current details
+  getById("e-name").value = person.name;
   getById("e-email").value = person.email;
+  getById("e-course").value = person.course || "";
   getById("e-event").value = person.event;
   getById("e-year").value = person.year;
   getById("d-edit").showModal();
@@ -357,12 +392,17 @@ async function handleEditSave(submit) {
 
   const name = getById("e-name").value.trim();
   const email = getById("e-email").value.trim().toLowerCase();
+  const studentId = getById("e-studentid").value.trim();
+  const course = getById("e-course").value;
   const problem = checkNameAndEmail(name, email);
   if (problem !== "") return showError("edit-alert", problem);
+  const idProblem = checkStudentId(studentId);
+  if (idProblem !== "") return showError("edit-alert", idProblem);
+  if (course === "") return showError("edit-alert", "Choose a course.");
 
   // Update the row in the Google Sheet
   const reply = await callSheet("update", {
-    id: editingId, name: name, email: email,
+    id: editingId, name: name, email: email, studentId: studentId, course: course,
     event: getById("e-event").value, year: getById("e-year").value
   });
   if (reply.status === "duplicate") return showError("edit-alert", "That email is already registered for this event.");
@@ -413,6 +453,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   loadTheme();
   fillEventSelect(getById("reg-event"), true);
   fillEventSelect(getById("e-event"), false);
+  fillCourseSelect(getById("reg-course"));
+  fillCourseSelect(getById("e-course"));
   renderCategoryButtons();
   renderEvents();
 
