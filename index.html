@@ -57,8 +57,10 @@
     <div id="form-alert" class="alert" hidden></div>
     <form id="reg-form" novalidate>
       <label>Event<select id="reg-event"></select></label>
+      <label>Student ID<input id="reg-studentid" placeholder="25-1568" maxlength="7" autocomplete="off"></label>
       <label>Full name<input id="reg-name" autocomplete="name"></label>
       <label>Email address<input id="reg-email" type="email" placeholder="you@isu.edu.ph" autocomplete="email"></label>
+      <label>Course<select id="reg-course"></select></label>
       <fieldset><legend>Year level</legend>
         <div class="radios">
           <label><input type="radio" name="year" value="1st Year">1st Year</label>
@@ -78,7 +80,7 @@
     <div class="row-head"><h2>Participants</h2><input type="search" id="p-search" placeholder="Search name, email or event" aria-label="Search participants"></div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Name</th><th>Email</th><th>Event</th><th>Year</th></tr></thead>
+        <thead><tr><th>Student ID</th><th>Name</th><th>Email</th><th>Course</th><th>Event</th><th>Year</th></tr></thead>
         <tbody id="p-list"></tbody>
       </table>
     </div>
@@ -147,19 +149,15 @@
 <dialog id="d-edit"><form class="dlg" id="edit-form" novalidate>
   <h3>Edit participant</h3>
   <div id="edit-alert" class="alert" hidden></div>
+  <label>Student ID<input id="e-studentid" maxlength="7"></label>
   <label>Full name<input id="e-name"></label>
   <label>Email address<input id="e-email" type="email"></label>
+  <label>Course<select id="e-course"></select></label>
   <label>Event<select id="e-event"></select></label>
   <label>Year level<select id="e-year"><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></label>
   <div class="actions"><button type="button" class="btn ghost-d" data-close>Cancel</button><button class="btn green" type="submit">Save changes</button></div>
 </form></dialog>
 
-<dialog id="d-del"><div class="dlg">
-  <h3>Delete this participant?</h3>
-  <p>This will permanently remove the registration of:</p>
-  <p class="who"><b id="del-name"></b><span id="del-info"></span></p>
-  <div class="actions"><button class="btn ghost-d" data-close>Cancel</button><button class="btn red" id="del-ok">Confirm delete</button></div>
-</div></dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
