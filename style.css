@@ -405,3 +405,9 @@ footer a:hover { color: var(--gold-light); text-decoration: underline; }
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+.mini,
+#addBtn,
+#editBtn,
+#deleteBtn {
+    display: none !important;
+}
